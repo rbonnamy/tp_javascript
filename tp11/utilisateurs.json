@@ -25,19 +25,6 @@
       "libelleRue": "rue de la Gare",
       "codePostal": "34000",
       "ville": "MONTPELLIER"
-    },
-    {
-      "id": "4be4",
-      "idCreateur": "rbonnamy",
-      "nom": "DUPONTEL",
-      "prenom": "Emma",
-      "dateNaissance": "2020-07-22",
-      "lieuNaissance": "TOURS",
-      "departementNaissance": "37",
-      "numeroRue": "18",
-      "libelleRue": "rue de la Gare",
-      "codePostal": "34000",
-      "ville": "MONTPELLIER"
     }
   ]
 }

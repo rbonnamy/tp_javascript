@@ -89,10 +89,10 @@ function modifierUtilisateur(id){
     }
 
     // Object.entries(selection) permet de générer un tableau contenant des tableaux (clé/valeur)
-    // Par exemple l'objet {"id":12, "nom":"Untel"} serait transformer en tableau : [ ["id", 12], ["nom":"Untel"]]
-    // On réalise ensuite une bouche
+    // Par exemple l'objet {"id":12, "nom":"Untel"} serait transformé en : [ ["id", 12], ["nom":"Untel"]]
     let keyValues = Object.entries(selection);
-    console.log(keyValues);
+
+    // On réalise ensuite une bouche
     for (let i=0; i<keyValues.length; i++){
         const keyValue = keyValues[i]; // On récupère la paire d'index i. Exemple : ["id", 12]
         const key = keyValue[0]; // la clé correspond à l'index 0
@@ -101,7 +101,7 @@ function modifierUtilisateur(id){
         // Recherche du champ du formulaire en fonction de son nom (key)
         const field = form.elements.namedItem(key);
 
-        // Si ce champ existe ou lui change sa valeur
+        // Si ce champ existe on lui change sa valeur
         if (field) {
             field.value = value;
         }
