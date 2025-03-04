@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+    function load(){
+        fetch('https://digicode.cleverapps.io/json/pays/pollution')
+        .then(rep=>rep.json())
+        .then(data=>init(data));
+    }
+    function init(data){
+        let eltTitre = document.querySelector("h2");
+        eltTitre.innerHTML = "Pays les plus polluants pour le "+data.polluant+" ("+data.unite+") en "+data.annee;
+
+        let html = "";
+        const eltTableBody = document.querySelector("tbody");
+        for (let i=0; i<data.pays.length; i++){ // boucle non indexée
+            let p = data.pays[i];
+            const img = "<img src='https://flagcdn.com/24x18/"+p.code+".png'>";
+            html+="<tr><td>"+img+"</td><td>"+p.nom+"</td><td>"+p.valeur+"</td><td>"+p.pourcentage+"</td>";
+        }
+        eltTableBody.innerHTML=html;
+    }
+    </script>
+</head>
+<body onload="load()">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <h2></h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th width="10%"></th>
+                            <th width="60%">Nom</th>
+                            <th>Valeur</th>
+                            <th>%</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="modale-view.js"></script>
+    <script>
+
+    let data;
+    function load(response){
+        data = response;
+        afficher();
+    }
+    fetch('https://digicode.cleverapps.io/json/pays/pollution').then(res=>res.json()).then(data => load(data));
+     
+    function afficher() {
+
+        let min = Number.parseFloat(document.querySelector("#min").value);
+        let max = Number.parseFloat(document.querySelector("#max").value);
+        if (isNaN(min)){
+            min=0;
+        }
+        if (isNaN(max)){
+            max=Number.MAX_VALUE;
+        }
+
+        if (min>max){
+            alert("Veuillez saisir un max > min.");
+            return;
+        }
+        if (min<0 || max<0){
+            alert("Veuillez saisir des nombres positifs.");
+            return;
+        }
+        let html="";
+        let element = document.querySelector("tbody");
+        for (p of data.pays){
+            let img = "<img src='https://flagcdn.com/24x18/"+p.code+".png'>";
+            if (p.valeur>=min && p.valeur<=max){
+                html+="<tr><td>"+img+"</td><td>"+p.nom+"</td><td>"+p.valeur+"</td><td>"+p.pourcentage+"</td>";
+            }
+        }
+        element.innerHTML=html;
+
+        let title = document.querySelector("h2");
+        title.innerHTML = "Pays les plus polluants pour le "+data.polluant+" ("+data.unite+") en "+data.annee;
+     }
+
+    </script>
+</head>
+<body>
+    <div class="container ml-4 mt-3">
+        <div class="row">
+            <div class="col-12">
+                <h2></h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+               &nbsp;
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-3">
+                Minimum <input type="number" name="min" id="min">
+            </div>
+            <div class="col-3">
+                Maximum <input type="number" name="max" id="max">
+            </div>
+            <div class="col-3">
+                <input type="button" onclick="afficher()" value="Valider">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+               &nbsp;
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th width="10%"></th>
+                            <th width="60%">Nom</th>
+                            <th>Valeur</th>
+                            <th>%</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

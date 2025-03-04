@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <script>
+
+    let pays = [];
+    function load(){
+        fetch('https://restcountries.com/v2/all').then(res=>res.json()).then(data => {
+            pays = data;
+            console.log(pays)
+            afficher(pays);
+        });
+    }
+
+    function changerIcone(propriete) {
+
+        // Récupération de toutes les icones
+        const icons = document.querySelectorAll("i");
+
+        // Boucle afin de faire pointer toutes les icones vers le haut.
+        // Seule l'icone correspond à la propriété sélectionnée pointe vers le bas.
+        for (let icon of icons){
+            icon.classList.remove('fa-caret-down');
+            icon.classList.add('fa-caret-up');
+        }
+
+        // Récupération de l'icone correspondant à la propriété sélectionnée
+        const icon = document.querySelector("#icon-"+propriete);
+
+        // Suppression de la flèche vers le haut et remplacement par la flèche vers le bas.
+        icon.classList.remove('fa-caret-up');
+        icon.classList.add('fa-caret-down');
+    }
+
+    function sortBy(nomPropriete) {
+
+        // On change l'orientation de l'icone de la colonne sélectionnée
+        changerIcone(nomPropriete);
+
+        // On tri en utilisant une fonction fléchée
+        // p1 et p2 représente 2 pays du tableaux qu'on va comparer sur la base d'une de leur propriété
+        // L'algorithme compare les pays par pair et utilise des swap pour les ordonner dans le tableau
+        // L'algorithme s'arrête lorsque le tableau a été entièrement parcouru et qu'aucun swap n'est plus possible.
+        // Rappelons qu'on peut accéder à une propriété d'un objet littéral en utilisant objet[nomPropriete]
+        pays.sort((p1, p2) => {
+                // Valeur de la propriété du pays p1 => transformation en chaine de car afin de traiter les nombres sous forme
+                // de chaine de car.
+                const valeurPropriete1 = p1[nomPropriete] ? p1[nomPropriete].toString() : "";
+
+                // Valeur de la propriété du pays p2 => transformation en chaine de car afin de traiter les nombres sous forme
+                // de chaine de car.
+                const valeurPropriete2 = p2[nomPropriete] ? p2[nomPropriete].toString() : "";
+
+                // On utilise la méthode localeCompare qui retourne:
+                // - un nombre positif si valeurPropriete1 > valeurPropriete2
+                // - un nombre négatif dans le cas inverse
+                // - 0 si les 2 sont identiques
+                // L'option undefined indique qu'on ne précise pas la langue de tri à utiliser
+                // {numeric: true} indique que si les chaines contiennent des nombres il faut les comparer numériquement
+                return valeurPropriete1.localeCompare(valeurPropriete2, undefined, { numeric: true });
+        });
+        afficher(pays);
+    }
+    
+    function afficher(pays) {
+        let html="";
+        let element = document.querySelector("tbody");
+        for (p of pays){
+            if (p.capital && p.population){
+                html+="<tr><td>"+p.region+"</td><td>"+p.name+"</td><td>"+p.capital+"</td><td>"+p.population+"</td>";
+            }
+        }
+        element.innerHTML=html;
+     }
+    </script>
+</head>
+<body onload="load()">
+    <div class="container ml-4 mt-3">
+        <div class="row">
+            <div class="col-12">
+                <h2>Liste des pays du monde</h2>
+            </div>
+        </div>
+        <div class="row mt-1">
+            <div class="col-12">
+               &nbsp;
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th width="20%">Région </th>
+                            <th width="30%">Nom <i class="fas fa-caret-down" id="icon-name" onclick="sortBy('name')"></i></th>
+                            <th width="30%">Capitale  <i class="fas fa-caret-up" id="icon-capital" onclick="sortBy('capital')"</th>
+                            <th>Population  <i class="fas fa-caret-up" id="icon-population" onclick="sortBy('population')"</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
